@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORM CARDS - Companion</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos base para o corpo do aplicativo */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fundo aprimorado: gradiente mais complexo com um toque de textura sutil */
+            background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #1f2937 100%);
+            background-size: 400% 400%; /* Para animação de fundo */
+            animation: gradientShift 15s ease infinite; /* Animação de fundo suave */
+            color: #e2e8f0; /* Cor do texto principal */
+            min-height: 100vh; /* Garante que o fundo cubra toda a tela */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centraliza o conteúdo principal */
+            padding: 1rem;
+            position: relative; /* Para posicionar elementos animados */
+            overflow-x: hidden; /* Evita rolagem horizontal */
+            transition: background 0.5s ease-in-out; /* Transição suave para o fundo */
+        }
+
+        /* Animação para o gradiente de fundo */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Estilo para o contêiner principal do conteúdo que será renderizado */
+        #app-container {
+            max-width: 900px;
+            width: 100%;
+            height: 100%; /* Ocupa a altura disponível */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 5rem; /* Espaço para a barra de controle fixa */
+        }
+
+        /* Estilo para os cards de conteúdo */
+        .card-panel {
+            background-color: #2d3748; /* Cor de fundo dos blocos de conteúdo */
+            border-radius: 1rem; /* Bordas arredondadas */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra */
+            border: 1px solid #4a5568; /* Borda sutil */
+            padding: 1.5rem;
+            width: 100%; /* Ocupa a largura total do container */
+        }
+
+        /* Estilo para botões primários */
+        .button-primary {
+            background-color: #4299e1; /* Azul vibrante */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .button-primary:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px);
+        }
+        .button-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Estilo para botões secundários */
+        .button-secondary {
+            background-color: #a0aec0; /* Cinza claro */
+            color: #2d3748;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .button-secondary:hover {
+            background-color: #718096;
+            transform: translateY(-2px);
+        }
+        .button-secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Estilo para campos de input */
+        .input-field {
+            background-color: #4a5568;
+            border: 1px solid #718096;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+        }
+
+        /* Estilo para títulos */
+        h1, h2, h3 {
+            color: #90cdf4; /* Azul mais claro para títulos */
+            font-weight: 700;
+        }
+        .section-title {
+            border-bottom: 2px solid #63b3ed; /* Linha sob os títulos de seção */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Estilos específicos para o Modo Caos */
+        body.chaos-active {
+            background: linear-gradient(135deg, #4a0e0e 0%, #7a1f1f 50%, #4a0e0e 100%); /* Fundo mais intenso */
+            animation: lightningFlash 4s infinite alternate, gradientShift 15s ease infinite; /* Animação de relâmpago + gradiente */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Pseudo-elemento para o efeito de relâmpago */
+        body.chaos-active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1); /* Brilho branco para simular relâmpago */
+            opacity: 0;
+            pointer-events: none;
+            animation: lightningFlashEffect 4s infinite alternate;
+            z-index: -1; /* Garante que fique atrás do conteúdo */
+        }
+
+        /* Keyframes para animação do relâmpago */
+        @keyframes lightningFlash {
+            0% { background: linear-gradient(135deg, #4a0e0e 0%, #7a1f1f 50%, #4a0e0e 100%); }
+            10% { background: linear-gradient(135deg, #5a1e1e 0%, #8a2f2f 50%, #5a1e1e 100%); }
+            20% { background: linear-gradient(135deg, #4a0e0e 0%, #7a1f1f 50%, #4a0e0e 100%); }
+            30% { background: linear-gradient(135deg, #5a1e1e 0%, #8a2f2f 50%, #5a1e1e 100%); }
+            40% { background: linear-gradient(135deg, #4a0e0e 0%, #7a1f1f 50%, #4a0e0e 100%); }
+            100% { background: linear-gradient(135deg, #4a0e0e 0%, #7a1f1f 50%, #4a0e0e 100%); }
+        }
+
+        @keyframes lightningFlashEffect {
+            0% { opacity: 0; }
+            5% { opacity: 0.2; }
+            10% { opacity: 0; }
+            15% { opacity: 0.3; }
+            20% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* Estilo para o ícone de tempestade no modo caos */
+        .chaos-icon {
+            display: none; /* Escondido por padrão */
+            font-size: 3rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #fcd34d; /* Amarelo para o raio */
+            animation: pulse 1.5s infinite alternate; /* Animação de pulso */
+            z-index: 10; /* Garante que fique acima de outros elementos */
+        }
+        body.chaos-active .chaos-icon {
+            display: block; /* Mostra quando o modo caos está ativo */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Estilo para as seções de regras colapsáveis */
+        details {
+            background-color: #364052;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: background-color 0.2s ease-in-out;
+            border: 1px solid #5a657a; /* Borda mais definida */
+        }
+        details[open] {
+            background-color: #4a5568;
+        }
+        summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            outline: none;
+            font-weight: 600;
+            color: #90cdf4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem; /* Tamanho de fonte aprimorado */
+        }
+        summary::-webkit-details-marker {
+            display: none; /* Remove o marcador padrão do Chrome */
+        }
+        summary::after {
+            content: '▼'; /* Ícone para indicar que pode ser expandido */
+            font-size: 0.8rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] summary::after {
+            transform: rotate(180deg); /* Gira o ícone quando expandido */
+        }
+        .rules-content {
+            padding: 0.8rem 1.5rem 1.5rem; /* Padding ajustado */
+            color: #e2e8f0;
+            line-height: 1.7; /* Espaçamento de linha aprimorado */
+            background-color: #2d3748; /* Fundo para o conteúdo expandido */
+            border-top: 1px solid #5a657a;
+        }
+        .rules-content ul, .rules-content ol {
+            margin-left: 1.5rem; /* Margem ajustada */
+            margin-top: 0.75rem; /* Margem ajustada */
+        }
+        .rules-content li {
+            margin-bottom: 0.4rem; /* Espaçamento entre itens de lista */
+        }
+        .rules-content strong {
+            color: #fcd34d; /* Cor para destaque de texto importante */
+        }
+        .rules-content p {
+            margin-bottom: 0.75rem; /* Espaçamento entre parágrafos */
+        }
+
+
+        /* Estilos para o layout do Contador de Vida (MTG Companion Style) */
+        #life-counter-layout {
+            display: flex;
+            flex-direction: column; /* Padrão para mobile portrait */
+            width: 100%;
+            height: 100%; /* Ocupa toda a altura do #app-container */
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem; /* Padding menor para maximizar espaço */
+            box-sizing: border-box; /* Inclui padding na altura/largura */
+        }
+
+        .player-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #2d3748;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #4a5568;
+            width: 100%; /* Ocupa a largura total em portrait */
+            height: 48%; /* Metade da altura em portrait */
+            padding: 0.5rem;
+            position: relative; /* Para o botão de reset individual */
+            transition: all 0.3s ease-in-out; /* Suaviza transições de layout */
+            margin-bottom: 1rem; /* Espaço entre os jogadores no retrato */
+        }
+        .player-section:last-child {
+            margin-bottom: 0; /* Remove margem do último jogador */
+        }
+
+        .player-life-display {
+            font-size: 8rem; /* Vida grande */
+            font-weight: 800;
+            color: #ef4444; /* Vermelho para a vida */
+            line-height: 1;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Sombra no texto da vida */
+            transition: transform 0.1s ease-out, color 0.1s ease-out; /* Animação de mudança de vida */
+        }
+
+        .life-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap; /* Permite quebrar em várias linhas em telas pequenas */
+            justify-content: center;
+        }
+
+        .life-controls button {
+            padding: 1rem 2rem;
+            font-size: 2.5rem;
+            border-radius: 9999px; /* Botões circulares */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            min-width: 60px; /* Garante um tamanho mínimo para o toque */
+        }
+
+        .set-life-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .set-life-controls input {
+            width: 6rem;
+            font-size: 1.25rem;
+        }
+
+        /* Central Controls (Fixed Bar) - Melhorado */
+        #central-controls {
+            position: fixed; /* Fixa na tela */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            /* Fundo da barra melhorado: gradiente sutil e borda mais pronunciada */
+            background: linear-gradient(to right, #1a202c, #2d3748, #1a202c);
+            border-top: 2px solid #63b3ed; /* Borda superior azul vibrante */
+            box-shadow: 0 -8px 20px -5px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
+            z-index: 100; /* Garante que fique acima de outros elementos */
+            display: flex;
+            justify-content: space-around; /* Distribui os itens uniformemente */
+            align-items: center;
+            padding: 0.75rem 1rem; /* Padding interno aprimorado */
+            gap: 0.75rem; /* Espaçamento entre os itens aprimorado */
+            flex-wrap: wrap; /* Permite quebrar em várias linhas se necessário */
+            backdrop-filter: blur(5px); /* Efeito de blur para modernidade */
+            -webkit-backdrop-filter: blur(5px); /* Suporte para Safari */
+        }
+        #central-controls.hidden {
+            display: none;
+        }
+        #central-controls button {
+             flex: 1 1 auto; /* Ajusta o tamanho dos botões na barra */
+             max-width: 150px; /* Limita o tamanho máximo dos botões */
+             padding: 0.7rem 1rem; /* Padding aprimorado para botões da barra */
+             font-size: 1rem; /* Fonte aprimorada para caber mais */
+             border-radius: 0.75rem; /* Bordas mais arredondadas */
+             box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Sombra sutil para botões */
+        }
+        #central-controls .turn-display-group,
+        #central-controls .chaos-display-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 80px; /* Garante que o display do turno não encolha demais */
+            padding: 0.2rem 0.5rem;
+            background-color: rgba(0,0,0,0.2); /* Fundo sutil para os displays */
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        #central-controls .turn-display-group h3,
+        #central-controls .chaos-display-group h3 {
+            color: #90cdf4;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        #central-controls .chaos-display-group p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        #central-controls .chaos-display-group span {
+            font-size: 1.2rem;
+        }
+
+
+        .reset-player-life-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .reset-player-life-btn:hover {
+            opacity: 1;
+        }
+
+        /* Orientação Landscape para o contador de vida */
+        @media (orientation: landscape) {
+            #life-counter-layout {
+                flex-direction: row; /* Lado a lado em landscape */
+                height: 100vh;
+                width: 100vw; /* Ocupa toda a largura da viewport */
+                padding: 0.5rem;
+            }
+
+            .player-section {
+                width: 48%; /* Quase metade da largura em landscape */
+                height: 95%; /* Quase toda a altura em landscape */
+                padding: 0.5rem;
+                margin-bottom: 0; /* Remove margem vertical em landscape */
+            }
+
+            #player1Section {
+                transform: rotate(180deg); /* Gira o jogador 1 */
+            }
+
+            #app-container {
+                padding-bottom: 0; /* Remove padding inferior em landscape */
+            }
+            #central-controls {
+                flex-direction: row;
+                justify-content: center;
+                gap: 1.5rem; /* Mais espaço entre os botões em landscape */
+                padding: 0.75rem 2rem;
+            }
+            #central-controls button {
+                max-width: 180px; /* Permite botões maiores em landscape */
+            }
+        }
+
+        /* Estilos para a página de regras - Melhorado */
+        #rules-layout {
+            padding: 1.5rem; /* Padding geral aprimorado */
+            max-width: 900px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; /* Permite rolagem nas regras */
+            background-color: #2d3748; /* Fundo do layout de regras */
+            border-radius: 1.5rem; /* Bordas mais arredondadas */
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 6px 10px -3px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+            border: 2px solid #4a5568; /* Borda mais visível */
+        }
+        #rules-layout .card-panel {
+            padding: 0; /* Remove padding extra do card-panel interno */
+            margin-top: 1rem;
+            background-color: transparent; /* Transparente para usar o fundo do layout */
+            box-shadow: none;
+            border: none;
+        }
+        #rules-layout .back-button-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 1.5rem; /* Margem maior */
+        }
+        #rules-layout .section-title {
+            color: #63b3ed; /* Azul mais forte para o título principal das regras */
+            font-size: 2.8rem; /* Tamanho de fonte maior */
+            margin-bottom: 2rem; /* Margem maior */
+            border-bottom: 3px solid #63b3ed; /* Borda mais grossa */
+            padding-bottom: 0.8rem;
+        }
+
+
+        /* Animação para mudança de vida */
+        .life-flash-green {
+            animation: lifeFlashGreen 0.3s ease-out;
+        }
+        .life-flash-red {
+            animation: lifeFlashRed 0.3s ease-out;
+        }
+        @keyframes lifeFlashGreen {
+            0% { transform: scale(1); color: #ef4444; }
+            50% { transform: scale(1.1); color: #81e6d9; } /* Verde-água */
+            100% { transform: scale(1); color: #ef4444; }
+        }
+        @keyframes lifeFlashRed {
+            0% { transform: scale(1); color: #ef4444; }
+            50% { transform: scale(1.1); color: #fc8181; } /* Vermelho-claro */
+            100% { transform: scale(1); color: #ef4444; }
+        }
+
+        /* Animação de pop-up de número */
+        .life-pop-up {
+            position: absolute;
+            font-size: 3rem;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(0);
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: lifePopUp 1s ease-out forwards;
+            z-index: 20;
+        }
+        .life-pop-up.gain {
+            color: #81e6d9; /* Verde-água */
+        }
+        .life-pop-up.loss {
+            color: #fc8181; /* Vermelho-claro */
+        }
+        @keyframes lifePopUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Ícone de Tempestade para o Modo Caos (sempre presente, mas visível apenas no modo caos) -->
+    <div id="chaosIcon" class="chaos-icon">⚡</div>
+
+    <!-- Container principal onde as "vistas" serão renderizadas -->
+    <div id="app-container">
+        <!-- Conteúdo será injetado aqui pelo JavaScript -->
+    </div>
+
+    <!-- Central Controls (Fixed Bar) -->
+    <div id="central-controls" class="hidden">
+        <div class="turn-display-group">
+            <h3 class="text-xl font-semibold text-blue-300">Turno</h3>
+            <span id="currentTurnDisplay" class="text-2xl font-bold text-white">1</span>
+        </div>
+        <button class="button-primary transform hover:scale-105 active:scale-95" onclick="nextTurn()">Próximo Turno</button>
+        <button id="toggleChaosBtn" class="button-secondary transform hover:scale-105 active:scale-95" onclick="toggleChaosMode()">Ativar Caos</button>
+        <div class="chaos-display-group">
+            <p class="text-base">Caos Restante</p>
+            <span id="chaosTurnsDisplay" class="font-bold text-red-400">3</span>
+        </div>
+        <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="showResetConfirm()">Reiniciar</button>
+        <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="showSection('startScreen')">Início</button>
+    </div>
+
+    <!-- Confirmação de Reset -->
+    <div id="reset-confirm-overlay">
+        <div id="reset-confirm-box" class="card-panel">
+            <p>Tem certeza que deseja reiniciar o jogo?</p>
+            <div class="button-group">
+                <button class="button-primary" onclick="confirmResetGame(true)">Sim</button>
+                <button class="button-secondary" onclick="confirmResetGame(false)">Não</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis de estado do jogo
+        let gameState = {
+            player1Life: 10,
+            player2Life: 10,
+            currentTurn: 1,
+            chaosModeActive: false,
+            chaosTurnsRemaining: 0,
+            chaosCustomDuration: 3,
+            soundEffectsOn: true,
+            backgroundAnimationsOn: true,
+            gameLog: [],
+            player1Name: "Jogador 1",
+            player2Name: "Jogador 2",
+        };
+
+        // Elemento onde as vistas serão renderizadas
+        const appContainer = document.getElementById('app-container');
+        const chaosIconEl = document.getElementById('chaosIcon');
+        const resetConfirmOverlay = document.getElementById('reset-confirm-overlay');
+        const centralControlsEl = document.getElementById('central-controls');
+
+        // --- Funções de Renderização de Vistas ---
+
+        /**
+         * Renderiza a tela de início.
+         */
+        function renderStartScreen() {
+            appContainer.innerHTML = `
+                <div id="start-screen-layout" class="flex flex-col justify-center items-center h-full text-center animate-fade-in">
+                    <h1 class="text-6xl sm:text-7xl font-extrabold text-white mb-4 tracking-wide">
+                        <span class="text-yellow-300">⚡</span> STORM CARDS <span class="text-blue-300">🌩️</span>
+                    </h1>
+                    <p class="text-2xl sm:text-3xl text-gray-300 mb-8">O Duelo da Tempestade!</p>
+                    <div class="flex flex-col space-y-4 w-full max-w-xs">
+                        <button class="button-primary px-10 py-4 text-xl transform hover:scale-105 active:scale-95" onclick="showSection('lifeCounter')">Contador de Vida</button>
+                        <button class="button-secondary px-10 py-4 text-xl transform hover:scale-105 active:scale-95" onclick="showSection('rules')">Regras do Jogo</button>
+                    </div>
+                </div>
+            `;
+            chaosIconEl.style.display = 'none';
+            document.body.classList.remove('chaos-active');
+            centralControlsEl.classList.add('hidden'); // Garante que os controles centrais estejam escondidos
+        }
+
+        /**
+         * Renderiza o contador de vida.
+         */
+        function renderLifeCounter() {
+            appContainer.innerHTML = `
+                <div id="life-counter-layout" class="animate-fade-in">
+                    <div id="player1Section" class="player-section">
+                        <button class="reset-player-life-btn transform hover:scale-110 active:scale-90" onclick="resetPlayerLife('player1')">Reset</button>
+                        <h3 class="text-2xl font-semibold mb-4 text-blue-300">${gameState.player1Name}</h3>
+                        <div class="player-life-display" id="lifePlayer1">${gameState.player1Life}</div>
+                        <div class="life-controls">
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player1', -5)">-5</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player1', -1)">-</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player1', 1)">+</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player1', 5)">+5</button>
+                        </div>
+                        <div class="set-life-controls">
+                            <input type="number" id="inputPlayer1" class="input-field" placeholder="Setar Vida" value="${gameState.player1Life}">
+                            <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="setLife('player1')">Setar</button>
+                        </div>
+                    </div>
+
+                    <div id="player2Section" class="player-section">
+                        <button class="reset-player-life-btn transform hover:scale-110 active:scale-90" onclick="resetPlayerLife('player2')">Reset</button>
+                        <h3 class="text-2xl font-semibold mb-4 text-blue-300">${gameState.player2Name}</h3>
+                        <div class="player-life-display" id="lifePlayer2">${gameState.player2Life}</div>
+                        <div class="life-controls">
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player2', -5)">-5</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player2', -1)">-</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player2', 1)">+</button>
+                            <button class="button-primary transform hover:scale-110 active:scale-90" onclick="changeLife('player2', 5)">+5</button>
+                        </div>
+                        <div class="set-life-controls">
+                            <input type="number" id="inputPlayer2" class="input-field" placeholder="Setar Vida" value="${gameState.player2Life}">
+                            <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="setLife('player2')">Setar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            centralControlsEl.classList.remove('hidden');
+            updateChaosModeUI();
+            updateLifeDisplay('player1', gameState.player1Life);
+            updateLifeDisplay('player2', gameState.player2Life);
+            updateTurnDisplay();
+        }
+
+        /**
+         * Renderiza a página de regras.
+         */
+        function renderRulesPage() {
+            appContainer.innerHTML = `
+                <div id="rules-layout" class="animate-fade-in">
+                    <div class="back-button-container">
+                        <button class="button-secondary px-6 py-2 transform hover:scale-105 active:scale-95" onclick="showSection('startScreen')">← Voltar ao Início</button>
+                    </div>
+                    <section class="card-panel">
+                        <h2 class="text-3xl font-bold mb-6 section-title">O Códex da Tempestade: Regras Detalhadas</h2>
+                        <div class="mb-4">
+                            <input type="text" id="ruleSearchInput" class="input-field w-full p-2 mb-4" placeholder="Pesquisar regras..." onkeyup="filterRules()">
+                        </div>
+                        <div id="rulesContentContainer" class="space-y-4 text-lg">
+                            <details>
+                                <summary>🎯 O Coração da Tempestade: Objetivo e Glória</summary>
+                                <div class="rules-content">
+                                    <p>Em <strong>STORM CARDS</strong>, dois Conjuradores se enfrentam em um duelo épico, manipulando as forças da natureza e o poder de suas cartas. Seu objetivo primordial é simples, mas desafiador: <strong>reduzir os Pontos de Vida do seu oponente a zero</strong> antes que ele faça o mesmo com você. A vitória não é apenas uma questão de dano bruto, mas de estratégia astuta, reações rápidas e a capacidade de prever os movimentos do seu adversário. Domine a tempestade, e a glória será sua!</p>
+                                    <p>Cada partida é uma dança dinâmica de ataque e defesa, onde cada decisão pode virar o curso do confronto. Prepare-se para invocar rajadas de vento, barreiras de terra e truques que confundem até os mais experientes Conjuradores.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>🧪 O Ritual da Preparação: Montando o Campo de Batalha</summary>
+                                <div class="rules-content">
+                                    <p>Antes que os raios comecem a cair, uma preparação cuidadosa é essencial para o sucesso no campo de batalha:</p>
+                                    <ol class="list-decimal list-inside space-y-2">
+                                        <li><strong>Seleção do Baralho Pessoal:</strong> Cada Conjurador deve selecionar meticulosamente <strong>8 cartas distintas</strong> para formar seu baralho pessoal. A singularidade é crucial aqui: você não pode ter duas cartas com o mesmo nome ou ID em seu baralho. Escolha sabiamente, pois estas serão suas ferramentas para moldar a tempestade.</li>
+                                        <li><strong>A Formação do Baralho Principal:</strong> Os dois baralhos pessoais são então combinados para criar o <strong>Baralho Principal da Partida</strong>, totalizando 16 cartas. Este baralho compartilhado é a fonte de poder para ambos os Conjuradores. Embaralhe-o com vigor, sentindo a energia das cartas se misturando, e posicione-o no centro da mesa, acessível a ambos.</li>
+                                        <li><strong>O Clima Inicial (Opcional, mas Recomendado):</strong> Para adicionar uma camada extra de imprevisibilidade e estratégia, vocês podem optar por embaralhar e revelar <strong>1 carta de Clima</strong>. Esta carta permanecerá ativa durante toda a partida, alterando as regras fundamentais do jogo e forçando os Conjuradores a se adaptarem constantemente às condições atmosféricas. O Clima pode ser um aliado traiçoeiro ou um inimigo implacável!</li>
+                                        <li><strong>Início da Vida e Mão Inicial:</strong> Cada Conjurador inicia o duelo com:
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>🃏 <strong>4 cartas na mão:</strong> Estas são suas ferramentas iniciais para influenciar o primeiro turno.</li>
+                                                <li>❤️ <strong>10 Pontos de Vida:</strong> Esta é a sua vitalidade. Proteja-a a todo custo!</li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                    <p>Com o campo preparado e as energias alinhadas, o palco está montado para o confronto!</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>🎮 O Ritmo do Duelo: A Estrutura dos Turnos</summary>
+                                <div class="rules-content">
+                                    <p>O duelo em <strong>STORM CARDS</strong> se desenrola em uma série de turnos intensos, cada um com suas fases cruciais:</p>
+                                    <ol class="list-decimal list-inside space-y-2">
+                                        <li><strong>Fase de Compra:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>➕ No início de cada turno, ambos os Conjuradores <strong>compram 1 carta</strong> do topo do Baralho Principal. A mão de cada jogador tem um limite de <strong>6 cartas</strong>. Se você já tiver 6 cartas na mão, não compra.</li>
+                                                <li>Esta fase é vital para reabastecer suas opções estratégicas.</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Fase de Escolha Secreta:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>Ambos os Conjuradores, simultaneamente e em segredo, escolhem <strong>1 carta de sua mão</strong> que desejam jogar neste turno.</li>
+                                                <li>Coloque a carta escolhida virada para baixo na mesa. Esta é a sua jogada oculta, a antecipação do confronto que se aproxima. ✋</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Fase de Revelação e Resolução:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>✅ Uma vez que ambos os Conjuradores tenham escolhido suas cartas, elas são <strong>reveladas juntas</strong>.</li>
+                                                <li>A resolução dos efeitos ocorre de acordo com o tipo de carta, seguindo uma ordem precisa:
+                                                    <ul class="list-disc list-inside ml-6">
+                                                        <li>🎭 <strong>Truques:</strong> Cartas de Truque são resolvidas <strong>primeiro</strong>. Estes são os golpes de astúcia e manipulação. Truques que afetam as cartas adversárias podem anular completamente uma jogada, inverter seus efeitos, ou modificar drasticamente as condições da rodada antes mesmo que o dano seja calculado.</li>
+                                                        <li>⚔️ <strong>Ataque vs. Defesa:</strong> Após a resolução dos Truques, as cartas de Ataque e Defesa se enfrentam. Uma carta de Defesa pode <strong>bloquear o dano</strong> de um Ataque. Se o valor de Dano do Ataque for superior ao valor de Defesa da carta jogada pelo oponente, o Conjurador que defendeu recebe a <strong>diferença como dano</strong> em seus Pontos de Vida. Se a Defesa for igual ou maior que o Ataque, nenhum dano é sofrido.</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Fase de Descarte:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>Após a resolução completa, todas as cartas jogadas neste turno são movidas para a <strong>pilha de descarte individual</strong> do Conjurador que as jogou.</li>
+                                                <li>🚫 Se você tiver mais de 6 cartas na mão após a fase de compra e resolução, você deve <strong>descartar cartas extras</strong> até ter no máximo 6 novamente.</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Condição de Vitória/Derrota:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>Se, ao final de qualquer fase, os Pontos de Vida de um Conjurador forem reduzidos a <strong>0 ou menos</strong>, ele perde a partida!</li>
+                                                <li>Em um raro e dramático momento, se ambos os Conjuradores caírem a 0 Pontos de Vida no <strong>mesmo turno</strong>, a partida termina em um <strong>Empate Climático</strong> ☁️⚡ – um confronto tão intenso que nenhum lado prevaleceu.</li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                    <p>Cada turno é uma oportunidade para superar seu adversário, adaptando-se e contra-atacando com maestria.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>♻️ O Ciclo da Energia: Pilhas de Descarte</summary>
+                                <div class="rules-content">
+                                    <p>Em <strong>STORM CARDS</strong>, cada Conjurador possui sua própria <strong>Pilha de Descarte</strong>, um repositório temporário para as cartas que já foram utilizadas. Este é um elemento estratégico crucial para o fluxo do jogo:</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li><strong>Destino das Cartas Jogadas:</strong> Sempre que uma carta é jogada (seja um Ataque, uma Defesa ou um Truque), ela é imediatamente colocada na sua pilha de descarte pessoal após a resolução de seus efeitos.</li>
+                                        <li><strong>Natureza do Descarte:</strong> Cartas na pilha de descarte são consideradas "fora de jogo" para a mão e o baralho principal. Elas não podem ser compradas novamente ou retornadas à mão por meios normais.</li>
+                                        <li><strong>Reciclagem de Baralho:</strong> A única exceção para o retorno de cartas do descarte ocorre quando o Baralho Principal se esgota, ativando um processo de "reciclagem" que revitaliza suas opções.</li>
+                                    </ul>
+                                    <p>Gerenciar sua pilha de descarte e observar a do seu oponente pode revelar padrões e estratégias, permitindo que você antecipe futuras jogadas.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>🔄 O Renascer da Tempestade: Quando o Baralho se Esgota</summary>
+                                <div class="rules-content">
+                                    <p>A energia das cartas no Baralho Principal não é infinita. Quando a última carta é comprada e o baralho se esgota, o campo de batalha se prepara para um <strong>Renascer da Tempestade</strong>:</p>
+                                    <ol class="list-decimal list-inside space-y-2">
+                                        <li><strong>Reciclagem Pessoal:</strong> Cada Conjurador deve, então, pegar <strong>sua própria pilha de descarte</strong>.</li>
+                                        <li><strong>Novo Baralho Individual:</strong> Embaralhe vigorosamente todas as cartas de sua pilha de descarte para formar um <strong>novo baralho pessoal</strong>. Este baralho agora se torna a fonte de suas próximas compras.</li>
+                                        <li><strong>Continuação do Duelo:</strong> O jogo continua normalmente, com os Conjuradores comprando cartas de seus recém-formados baralhos pessoais. 🌪️</li>
+                                    </ol>
+                                    <p>Este ciclo garante que a partida possa se estender, testando a resiliência e a adaptabilidade dos Conjuradores até que um vencedor seja coroado.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>⚠️ O Juramento do Conjurador: Regras Fundamentais</summary>
+                                <div class="rules-content">
+                                    <p>Para manter a integridade e a emoção do duelo, certas regras são inquebráveis:</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li>✅ <strong>Unicidade do Baralho:</strong> Cada Conjurador deve montar seu baralho pessoal com exatamente 8 cartas, e <strong>todas elas devem ser únicas</strong> (não pode haver cartas com o mesmo nome ou ID).</li>
+                                        <li>✅ <strong>Baralho Compartilhado:</strong> As partidas são sempre travadas utilizando um <strong>baralho principal compartilhado de 16 cartas</strong>, formado pela união dos baralhos pessoais de ambos os jogadores.</li>
+                                        <li>✅ <strong>O Chamado da Tempestade:</strong> A poderosa carta especial "Chamado da Tempestade" (formato 4x7 cm) é de tal magnitude que só pode ser <strong>ativada uma única vez por partida por cada Conjurador</strong>. Use-a com sabedoria!</li>
+                                        <li>✅ <strong>Empate Climático:</strong> Apenas se ambos os Conjuradores tiverem seus Pontos de Vida reduzidos a 0 ou menos <strong>simultaneamente no mesmo turno</strong>, a partida é declarada um empate da tempestade. Caso contrário, o primeiro a cair perde.</li>
+                                        <li>✅ <strong>Prioridade de Truques:</strong> Lembre-se sempre que as cartas de Truque têm prioridade e são resolvidas antes dos Ataques e Defesas.</li>
+                                        <li>✅ <strong>Limite de Mão:</strong> Mantenha sempre no máximo 6 cartas na mão ao final de cada turno.</li>
+                                        <li>✅ <strong>Adaptação ao Clima:</strong> Esteja sempre atento à carta de Clima ativa, pois seus efeitos alteram as regras para ambos os jogadores.</li>
+                                    </ul>
+                                    <p>Aderir a estes preceitos garante um duelo justo e emocionante para todos.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>🌦️ A Vontade dos Céus: Cartas de Clima (Modo Avançado)</summary>
+                                <div class="rules-content">
+                                    <p>As <strong>Cartas de Clima</strong> são elementos avançados que infundem cada partida com uma atmosfera única e imprevisível, alterando as regras do jogo com efeitos constantes e globais. Elas representam a própria vontade dos céus, e nenhum Conjurador está imune à sua influência!</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li><strong>Posicionamento:</strong> As cartas de clima não se juntam às pilhas de descarte dos Conjuradores. Em vez disso, elas residem em uma <strong>Área de Clima separada</strong> (geralmente no centro da mesa), visível para todos.</li>
+                                        <li><strong>Singularidade Climática:</strong> Apenas <strong>uma carta de clima pode estar ativa por vez</strong>. Se uma nova carta de clima for introduzida no jogo (seja por um efeito de carta ou uma regra da casa), a carta de clima anterior é descartada para uma "Pilha de Descarte Global de Clima" ou removida da partida, conforme as regras específicas que vocês definirem para o seu grupo.</li>
+                                        <li><strong>Exemplos de Influência Climática:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li>🌫️ <strong>Nevoeiro Denso:</strong> Uma névoa espessa envolve o campo! Todos os Truques jogados neste clima são transformados em cartas de Defesa, ganhando um bônus de <strong>+1 ponto de vida de bloqueio</strong>. A astúcia se torna escudo.</li>
+                                                <li>❄️ <strong>Nevasca Gélida:</strong> O frio intenso fortalece as barreiras! Cartas de Defesa ganham um bônus de <strong>+1 ponto de bloqueio</strong> adicional, tornando-as mais resistentes aos Ataques.</li>
+                                                <li>⚡ <strong>Tempestade Elétrica:</strong> A energia crepita no ar! Toda vez que um Conjurador usa uma carta de Ataque, ele próprio <strong>recebe 1 ponto de dano</strong>. O poder tem um preço.</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Potencial de Expansão:</strong> A beleza das cartas de Clima reside em sua adaptabilidade. Novas e emocionantes cartas de Clima podem ser introduzidas em futuras expansões ou, com a criatividade dos Conjuradores, podem ser criadas como regras da casa, garantindo que cada duelo seja uma experiência única e imprevisível! 🌀</li>
+                                    </ul>
+                                    <p>Dominar a arte de se adaptar ao Clima é a chave para a vitória nos duelos mais desafiadores.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>🌩️ O Chamado da Tempestade: O Caos Desencadeado (Carta Especial)</summary>
+                                <div class="rules-content">
+                                    <p>O <strong>Chamado da Tempestade</strong> não é uma carta comum; é um artefato de poder imenso, capaz de virar o jogo de cabeça para baixo. Seu uso é um evento cataclísmico que desencadeia o <strong>Modo Caos Temporário</strong>, um estado de anarquia elemental que dura por um período limitado:</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li><strong>Tipo de Carta:</strong> Truque Especial (com um formato distinto de 4x7 cm, para fácil reconhecimento).</li>
+                                        <li><strong>Efeito de Ativação:</strong> Ao ser jogada e ativada, o Chamado da Tempestade não apenas resolve seus próprios efeitos, mas também inicia imediatamente o <strong>Modo Caos Temporário</strong>.</li>
+                                        <li><strong>🌪️ O Modo Caos Temporário – A Anarquia Elemental:</strong> Este estado especial persiste por <strong>3 turnos completos</strong> a partir de sua ativação. Durante este período, as leis normais da batalha são distorcidas:
+                                            <ol class="list-decimal list-inside ml-4 space-y-2">
+                                                <li><strong>Clima Duplo:</strong> Uma <strong>nova Carta de Clima é ativada imediatamente</strong> e coexiste com qualquer carta de Clima já em campo. O caos permite que duas influências climáticas moldem o duelo simultaneamente!</li>
+                                                <li><strong>Regras Especiais do Caos:</strong> Durante os 3 turnos do Modo Caos, as seguintes regras adicionais entram em vigor, afetando ambos os Conjuradores:
+                                                    <ul class="list-disc list-inside ml-4">
+                                                        <li><strong>Amplificação Climática:</strong> Os efeitos de <strong>todas as cartas de Clima ativas são dobrados</strong>! Se um clima normalmente concede +1 vida de bloqueio, agora concede +2. A tempestade se intensifica!</li>
+                                                        <li><strong>Truques Implacáveis:</strong> Todos os Truques jogados durante o Modo Caos <strong>ignoram completamente as defesas</strong>. Eles atingem seu alvo sem oposição, tornando-se ferramentas de manipulação ainda mais perigosas.</li>
+                                                        <li><strong>Fluxo Acelerado de Cartas:</strong> Ambos os Conjuradores compram <strong>+1 carta extra</strong> no início de cada turno, acelerando o ritmo do jogo e as opções disponíveis.</li>
+                                                        <li><strong>Restrição de Repetição:</strong> A intensidade do caos exige sacrifício. Os Conjuradores <strong>não podem usar a mesma carta duas vezes</strong> dentro do período do Modo Caos, mesmo que ela retorne à mão por algum efeito.</li>
+                                                    </ul>
+                                                </li>
+                                                <li><strong>O Fim da Anarquia:</strong> Após a conclusão dos 3 turnos, o Modo Caos se dissipa. A carta de clima extra (ativada pelo Chamado da Tempestade) é descartada, e todas as regras especiais do caos revertem ao normal. O campo de batalha encontra um breve momento de calma antes que a próxima estratégia seja tecida.</li>
+                                            </ol>
+                                        </li>
+                                        <li><strong>⚠️ O Preço do Poder: Regras Especiais do Chamado:</strong>
+                                            <ul class="list-disc list-inside ml-4">
+                                                <li><strong>Uso Único:</strong> A magnitude do Chamado da Tempestade é tal que cada Conjurador só pode ativá-lo <strong>uma única vez por partida</strong>. Escolha o momento certo!</li>
+                                                <li><strong>Conflito de Chamados (Variação Opcional):</strong> Se, por um acaso raro e dramático, ambos os Conjuradores jogarem o Chamado da Tempestade no mesmo turno, o Modo Caos se estende para <strong>4 turnos</strong>, e os efeitos são ainda mais intensos e imprevisíveis, levando o duelo a um clímax apocalíptico!</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <p>O Chamado da Tempestade é a ferramenta definitiva para virar a maré da batalha, mas seu poder deve ser empunhado com sabedoria e coragem.</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>💡 O Guia do Conjurador: Dicas Rápidas para a Vitória</summary>
+                                <div class="rules-content">
+                                    <p>Mesmo os mais experientes Conjuradores se beneficiam de lembretes estratégicos. Aqui estão algumas dicas para aprimorar sua maestria na tempestade:</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li>🔀 <strong>Embaralhe com Propósito:</strong> No início da partida, misture o baralho principal com cuidado e intenção. Uma boa embaralhada garante a imprevisibilidade e a justiça do sorteio.</li>
+                                        <li>🎯 <strong>Truques no Momento Certo:</strong> As cartas de Truque são suas armas secretas. Use-as nos momentos decisivos para desestabilizar a estratégia do oponente, anular um ataque fatal ou proteger-se de forma inesperada. O timing é tudo!</li>
+                                        <li>🧠 <strong>Leia a Mente do Oponente:</strong> Tente antecipar o próximo movimento do seu adversário. Observe suas cartas jogadas, sua pilha de descarte e até mesmo sua linguagem corporal. A previsão é uma forma poderosa de magia.</li>
+                                        <li>⚡ <strong>Defesas Decisivas:</strong> Uma Defesa bem jogada pode não apenas bloquear o dano, mas também virar completamente o jogo, frustrando o ataque mais poderoso do seu oponente e abrindo caminho para sua própria ofensiva.</li>
+                                        <li>🔥 <strong>O Clima é Seu Aliado (ou Inimigo):</strong> Preste atenção constante à carta de Clima ativa. Seus efeitos podem ser explorados a seu favor ou mitigados para minimizar desvantagens. O Conjurador que melhor se adapta ao Clima é o que prevalece.</li>
+                                        <li>🔄 <strong>Gerencie sua Mão:</strong> Mantenha um equilíbrio entre ter opções na mão e evitar o descarte excessivo. Saber quando jogar e quando segurar uma carta é uma arte.</li>
+                                        <li>📈 <strong>Aprenda com Cada Duelo:</strong> Cada partida, seja vitória ou derrota, é uma lição. Analise suas jogadas, as do oponente e como as cartas de Clima influenciaram o resultado. O crescimento vem da reflexão.</li>
+                                    </ul>
+                                    <p>Com prática e estratégia, você se tornará uma força imparável na tempestade!</p>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>✨ Além do Horizonte: Expansão e Personalização</summary>
+                                <div class="rules-content">
+                                    <p><strong>STORM CARDS</strong> foi concebido com a mente aberta para a criatividade e a evolução. O jogo não termina com as regras básicas; ele é uma tela em branco para sua imaginação:</p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <li>🃏 <strong>Crie Novas Cartas:</strong> Sinta-se à vontade para projetar e adicionar suas próprias cartas ao universo de STORM CARDS! Desenvolva novos Ataques, Defesas e Truques com efeitos únicos que se encaixem na temática da tempestade. Experimente com novas mecânicas e sinergias.</li>
+                                        <li>🌦️ <strong>Invento Novos Climas:</strong> O clima é um elemento dinâmico. Crie suas próprias cartas de Clima com efeitos que alterem o jogo de maneiras inovadoras e desafiadoras. Que tipo de tempestade você pode conjurar?</li>
+                                        <li>🎲 <strong>Desenvolva Modos de Jogo Próprios:</strong> Vá além do duelo 1v1. Crie modos de jogo com regras da casa, cenários cooperativos, ou até mesmo formatos de vários jogadores. A comunidade de Conjuradores é incentivada a inovar!</li>
+                                        <li>🎨 <strong>Personalize Sua Experiência:</strong> Adapte as regras existentes para se adequarem ao seu estilo de jogo. Ajuste os pontos de vida iniciais, o limite de cartas na mão, ou a duração do Modo Caos. O jogo é seu para moldar.</li>
+                                    </ul>
+                                    <p>Cada nova tempestade pode ser drasticamente diferente da anterior, garantindo uma longevidade e diversão infinitas. Deixe sua criatividade fluir e torne STORM CARDS verdadeiramente seu! 🌀</p>
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+                </div>
+            `;
+            chaosIconEl.style.display = 'none'; // Garante que o ícone de caos esteja escondido
+            document.body.classList.remove('chaos-active');
+            centralControlsEl.classList.add('hidden'); // Garante que os controles centrais estejam escondidos
+        }
+
+        // --- Funções de Lógica do Jogo ---
+
+        /**
+         * Atualiza a exibição da vida de um jogador.
+         * @param {string} player - 'player1' ou 'player2'.
+         * @param {number} life - O valor da vida a ser exibido.
+         */
+        function updateLifeDisplay(player, life) {
+            const lifeElement = document.getElementById(`life${player === 'player1' ? 'Player1' : 'Player2'}`);
+            if (lifeElement) { // Verifica se o elemento existe (apenas na vista do contador)
+                lifeElement.textContent = life;
+                // Remove classes de animação antigas
+                lifeElement.classList.remove('life-flash-green', 'life-flash-red', 'animate-pulse');
+                if (life <= 0) {
+                    lifeElement.classList.add('text-red-600', 'animate-pulse');
+                } else {
+                    lifeElement.classList.remove('text-red-600');
+                }
+            }
+        }
+
+        /**
+         * Cria e exibe uma animação de pop-up de número.
+         * @param {HTMLElement} parentElement - O elemento pai onde o pop-up será anexado.
+         * @param {number} amount - O valor da mudança de vida.
+         */
+        function createLifePopUp(parentElement, amount) {
+            const popUp = document.createElement('div');
+            popUp.textContent = (amount > 0 ? '+' : '') + amount;
+            popUp.classList.add('life-pop-up', amount > 0 ? 'gain' : 'loss');
+
+            // Posiciona o pop-up dinamicamente
+            const parentRect = parentElement.getBoundingClientRect();
+            popUp.style.left = `${parentRect.width / 2}px`;
+            popUp.style.top = `${parentRect.height / 2}px`;
+            popUp.style.transform = `translate(-50%, -50%)`; // Centraliza o pop-up
+
+            parentElement.appendChild(popUp);
+
+            // Remove o elemento após a animação
+            popUp.addEventListener('animationend', () => {
+                popUp.remove();
+            });
+        }
+
+        /**
+         * Altera a vida de um jogador por um determinado valor.
+         * @param {string} player - 'player1' ou 'player2'.
+         * @param {number} amount - Quantidade a ser adicionada (positiva) ou subtraída (negativa).
+         */
+        function changeLife(player, amount) {
+            const playerSection = document.getElementById(`${player}Section`);
+            createLifePopUp(playerSection, amount); // Cria a animação de pop-up
+
+            if (player === 'player1') {
+                gameState.player1Life += amount;
+                updateLifeDisplay('player1', gameState.player1Life);
+                addLogEntry(`${gameState.player1Name || 'Jogador 1'} ${amount > 0 ? 'ganhou' : 'perdeu'} ${Math.abs(amount)} vida.`, 'life-change');
+            } else {
+                gameState.player2Life += amount;
+                updateLifeDisplay('player2', gameState.player2Life);
+                addLogEntry(`${gameState.player2Name || 'Jogador 2'} ${amount > 0 ? 'ganhou' : 'perdeu'} ${Math.abs(amount)} vida.`, 'life-change');
+            }
+            playSound('lifeChange');
+        }
+
+        /**
+         * Define a vida de um jogador manualmente através do input.
+         * @param {string} player - 'player1' ou 'player2'.
+         */
+        function setLife(player) {
+            const inputElement = document.getElementById(`input${player === 'player1' ? 'Player1' : 'Player2'}`);
+            if (inputElement) {
+                let newLife = parseInt(inputElement.value);
+                if (!isNaN(newLife)) {
+                    const oldLife = (player === 'player1' ? gameState.player1Life : gameState.player2Life);
+                    const amount = newLife - oldLife;
+
+                    if (player === 'player1') {
+                        gameState.player1Life = newLife;
+                        updateLifeDisplay('player1', gameState.player1Life);
+                        addLogEntry(`${gameState.player1Name || 'Jogador 1'} setou a vida para ${newLife}.`, 'life-change');
+                    } else {
+                        gameState.player2Life = newLife;
+                        updateLifeDisplay('player2', gameState.player2Life);
+                        addLogEntry(`${gameState.player2Name || 'Jogador 2'} setou a vida para ${newLife}.`, 'life-change');
+                    }
+                    if (amount !== 0) { // Só cria pop-up se a vida realmente mudar
+                         const playerSection = document.getElementById(`${player}Section`);
+                         createLifePopUp(playerSection, amount);
+                    }
+                    playSound('lifeChange');
+                } else {
+                    console.error("Por favor, insira um número válido para a vida.");
+                }
+            }
+        }
+
+        /**
+         * Reinicia a vida de um jogador individualmente para 10.
+         * @param {string} player - 'player1' ou 'player2'.
+         */
+        function resetPlayerLife(player) {
+            if (player === 'player1') {
+                gameState.player1Life = 10;
+                updateLifeDisplay('player1', gameState.player1Life);
+                document.getElementById('inputPlayer1').value = 10;
+                addLogEntry(`${gameState.player1Name || 'Jogador 1'} resetou a vida.`, 'reset');
+            } else {
+                gameState.player2Life = 10;
+                updateLifeDisplay('player2', gameState.player2Life);
+                document.getElementById('inputPlayer2').value = 10;
+                addLogEntry(`${gameState.player2Name || 'Jogador 2'} resetou a vida.`, 'reset');
+            }
+            playSound('reset');
+        }
+
+        /**
+         * Mostra a caixa de confirmação para reiniciar o jogo.
+         */
+        function showResetConfirm() {
+            resetConfirmOverlay.classList.add('visible');
+        }
+
+        /**
+         * Confirma ou cancela o reset do jogo.
+         * @param {boolean} confirm - True para confirmar, false para cancelar.
+         */
+        function confirmResetGame(confirm) {
+            resetConfirmOverlay.classList.remove('visible');
+            if (confirm) {
+                resetGame();
+            }
+        }
+
+        /**
+         * Reinicia todo o jogo (vidas, turno, modo caos).
+         */
+        function resetGame() {
+            gameState.player1Life = 10;
+            gameState.player2Life = 10;
+            gameState.currentTurn = 1;
+            gameState.chaosModeActive = false;
+            gameState.chaosTurnsRemaining = 0;
+            gameState.gameLog = []; // Limpa o log
+
+            addLogEntry('Jogo Reiniciado!', 'reset');
+            renderLifeCounter(); // Re-renderiza o contador de vida para atualizar tudo
+            playSound('reset');
+        }
+
+        // --- Funções do Contador de Turnos ---
+
+        /**
+         * Atualiza a exibição do turno atual e do caos restante.
+         */
+        function updateTurnDisplay() {
+            const currentTurnDisplayEl = document.getElementById('currentTurnDisplay');
+            if (currentTurnDisplayEl) {
+                currentTurnDisplayEl.textContent = gameState.currentTurn;
+            }
+            // Atualiza o display de caos na barra fixa
+            const chaosTurnsDisplayEl = document.getElementById('chaosTurnsDisplay');
+            if (chaosTurnsDisplayEl) {
+                chaosTurnsDisplayEl.textContent = gameState.chaosTurnsRemaining;
+            }
+        }
+
+        /**
+         * Avança para o próximo turno.
+         */
+        function nextTurn() {
+            gameState.currentTurn++;
+            addLogEntry(`Início do Turno ${gameState.currentTurn}.`, 'turn-change');
+
+            // Se o Modo Caos estiver ativo, decrementa os turnos restantes
+            if (gameState.chaosModeActive) {
+                gameState.chaosTurnsRemaining--;
+                if (gameState.chaosTurnsRemaining <= 0) {
+                    toggleChaosMode(); // Desativa o Modo Caos automaticamente
+                    addLogEntry('Modo Caos terminou!', 'chaos-mode');
+                }
+            }
+            updateTurnDisplay(); // Atualiza display de turno e caos
+            playSound('nextTurn');
+        }
+
+        // --- Funções do Modo Caos ---
+
+        /**
+         * Atualiza a exibição do Modo Caos e seus efeitos visuais.
+         */
+        function updateChaosModeUI() {
+            const toggleChaosBtn = document.getElementById('toggleChaosBtn');
+            const chaosTurnsDisplayEl = document.getElementById('chaosTurnsDisplay');
+
+            if (gameState.chaosModeActive) {
+                if (gameState.backgroundAnimationsOn) {
+                    document.body.classList.add('chaos-active');
+                }
+                if (toggleChaosBtn) toggleChaosBtn.textContent = 'Desativar Caos';
+                if (chaosTurnsDisplayEl) chaosTurnsDisplayEl.parentElement.classList.remove('hidden'); // Mostra o grupo
+                if (chaosTurnsDisplayEl) chaosTurnsDisplayEl.textContent = gameState.chaosTurnsRemaining;
+                chaosIconEl.style.display = 'block'; // Mostra o ícone
+            } else {
+                document.body.classList.remove('chaos-active');
+                if (toggleChaosBtn) toggleChaosBtn.textContent = 'Ativar Caos';
+                if (chaosTurnsDisplayEl) chaosTurnsDisplayEl.parentElement.classList.add('hidden'); // Esconde o grupo
+                chaosIconEl.style.display = 'none'; // Esconde o ícone
+            }
+        }
+
+        /**
+         * Ativa ou desativa o Modo Caos.
+         */
+        function toggleChaosMode() {
+            gameState.chaosModeActive = !gameState.chaosModeActive;
+            if (gameState.chaosModeActive) {
+                gameState.chaosTurnsRemaining = gameState.chaosCustomDuration; // Inicia com a duração personalizada
+                addLogEntry(`Modo Caos ativado por ${gameState.chaosCustomDuration} turnos!`, 'chaos-mode');
+                playSound('chaosActivate');
+            }
+            updateChaosModeUI();
+        }
+
+        /**
+         * Define a duração personalizada do Modo Caos.
+         */
+        function setChaosDuration() {
+            // Esta função seria chamada de dentro do modal de ferramentas, que foi removido.
+            // Se o usuário quiser configurar isso, precisaremos de uma nova interface.
+            // Por enquanto, apenas um log.
+            console.warn("A função setChaosDuration foi chamada, mas a interface para definir a duração do caos foi removida. A duração padrão é 3 turnos.");
+            addLogEntry(`Tentou definir Duração Caos. (Interface removida)`, 'settings');
+        }
+
+        // --- Funções de Log de Jogo (simplificadas, sem modal de ferramentas) ---
+
+        /**
+         * Adiciona uma entrada ao log de jogo.
+         * @param {string} message - A mensagem a ser adicionada.
+         * @param {string} type - O tipo de evento (para estilização).
+         */
+        function addLogEntry(message, type = 'general') {
+            const timestamp = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const logEntry = { timestamp, message, type };
+            gameState.gameLog.push(logEntry);
+            // No longer updating a visible log area, just console for now.
+            // If a log display is desired, it needs a dedicated UI element.
+            console.log(`[LOG] ${timestamp} - ${message}`);
+        }
+
+        /**
+         * Toca um som específico.
+         * @param {string} type - O tipo de som a tocar.
+         */
+        function playSound(type) {
+            if (!gameState.soundEffectsOn) return;
+
+            let audio;
+            switch (type) {
+                case 'lifeChange':
+                    audio = new Audio('https://www.soundjay.com/buttons/button-1.wav');
+                    break;
+                case 'reset':
+                    audio = new Audio('https://www.soundjay.com/buttons/button-2.wav');
+                    break;
+                case 'nextTurn':
+                    audio = new Audio('https://www.soundjay.com/buttons/button-3.wav');
+                    break;
+                case 'chaosActivate':
+                    audio = new Audio('https://www.soundjay.com/misc/camera-shutter-1.wav');
+                    break;
+                default:
+                    return;
+            }
+            audio.volume = 0.5;
+            audio.play().catch(e => console.error("Erro ao tocar som:", e));
+        }
+
+        // --- Funções de Pesquisa de Regras ---
+
+        /**
+         * Filtra as regras com base no texto de pesquisa.
+         */
+        function filterRules() {
+            const searchInput = document.getElementById('ruleSearchInput');
+            const searchTerm = searchInput.value.toLowerCase();
+            const rulesContainer = document.getElementById('rulesContentContainer');
+            const ruleDetails = rulesContainer.querySelectorAll('details');
+
+            ruleDetails.forEach(detail => {
+                const summaryText = detail.querySelector('summary').textContent.toLowerCase();
+                const contentText = detail.querySelector('.rules-content').textContent.toLowerCase();
+
+                if (searchTerm === '' || summaryText.includes(searchTerm) || contentText.includes(searchTerm)) {
+                    detail.style.display = ''; // Mostra o elemento
+                    detail.open = searchTerm !== ''; // Abre a seção se houver termo de pesquisa, senão mantém fechado
+                } else {
+                    detail.style.display = 'none'; // Esconde o elemento
+                }
+            });
+        }
+
+        // --- Funções de Persistência (LocalStorage) ---
+
+        /**
+         * Salva o estado atual do jogo no localStorage.
+         */
+        function saveGameState() {
+            try {
+                localStorage.setItem('stormCardsGameState', JSON.stringify(gameState));
+            } catch (e) {
+                console.error("Erro ao salvar estado do jogo:", e);
+            }
+        }
+
+        /**
+         * Carrega o estado do jogo do localStorage.
+         */
+        function loadGameState() {
+            try {
+                const savedState = localStorage.getItem('stormCardsGameState');
+                if (savedState) {
+                    const parsedState = JSON.parse(savedState);
+                    // Mescla o estado salvo com o estado inicial para garantir que novas propriedades sejam adicionadas
+                    gameState = { ...gameState, ...parsedState };
+                }
+            } catch (e) {
+                console.error("Erro ao carregar estado do jogo:", e);
+                // Se houver erro, reseta para o estado inicial para evitar bugs
+                localStorage.removeItem('stormCardsGameState');
+            }
+        }
+
+        // --- Função para Gerenciar Seções ---
+        /**
+         * Mostra a seção especificada e esconde as outras.
+         * @param {string} sectionId - O ID da seção a ser mostrada ('startScreen', 'lifeCounter', 'rules').
+         */
+        function showSection(sectionId) {
+            // Esconde todas as seções primeiro
+            const allSections = appContainer.children;
+            while(allSections.length > 0) {
+                allSections[0].remove(); // Remove o conteúdo anterior
+            }
+
+            // Esconde os controles centrais e efeitos de caos por padrão
+            centralControlsEl.classList.add('hidden');
+            document.body.classList.remove('chaos-active');
+            chaosIconEl.style.display = 'none';
+
+            // Renderiza a seção desejada
+            if (sectionId === 'startScreen') {
+                renderStartScreen();
+            } else if (sectionId === 'lifeCounter') {
+                renderLifeCounter();
+            } else if (sectionId === 'rules') {
+                renderRulesPage();
+            }
+            saveGameState(); // Salva o estado ao trocar de seção
+        }
+
+
+        // --- Inicialização do App ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGameState(); // Carrega o estado salvo ao iniciar
+            // Não há mais listeners de arrasto ou ferramentas
+
+            // Adiciona listener para salvar estado antes de fechar/recarregar
+            window.addEventListener('beforeunload', saveGameState);
+
+            showSection('startScreen'); // Renderiza a tela de início ao carregar a página
+        });
+    </script>
+</body>
+</html>
+
