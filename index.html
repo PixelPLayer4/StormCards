@@ -366,6 +366,20 @@
             font-size: 1.2rem;
         }
 
+        /* Botões de navegação de turno */
+        .turn-navigation-group {
+            display: flex;
+            gap: 0.5rem; /* Espaçamento entre os botões de turno */
+            align-items: center;
+            flex-shrink: 0; /* Evita que o grupo encolha */
+        }
+        .turn-navigation-group button {
+            padding: 0.5rem 0.8rem; /* Padding menor para botões de turno */
+            font-size: 1.2rem; /* Tamanho de fonte para os símbolos +/- */
+            border-radius: 0.5rem;
+            min-width: auto; /* Permite que o botão seja pequeno */
+        }
+
 
         .reset-player-life-btn {
             position: absolute;
@@ -512,25 +526,16 @@
             <h3 class="text-xl font-semibold text-blue-300">Turno</h3>
             <span id="currentTurnDisplay" class="text-2xl font-bold text-white">1</span>
         </div>
-        <button class="button-primary transform hover:scale-105 active:scale-95" onclick="nextTurn()">Próximo Turno</button>
+        <div class="turn-navigation-group">
+            <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="previousTurn()">-</button>
+            <button class="button-primary transform hover:scale-105 active:scale-95" onclick="nextTurn()">+</button>
+        </div>
         <button id="toggleChaosBtn" class="button-secondary transform hover:scale-105 active:scale-95" onclick="toggleChaosMode()">Ativar Caos</button>
         <div class="chaos-display-group">
             <p class="text-base">Caos Restante</p>
             <span id="chaosTurnsDisplay" class="font-bold text-red-400">3</span>
         </div>
-        <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="showResetConfirm()">Reiniciar</button>
         <button class="button-secondary transform hover:scale-105 active:scale-95" onclick="showSection('startScreen')">Início</button>
-    </div>
-
-    <!-- Confirmação de Reset -->
-    <div id="reset-confirm-overlay">
-        <div id="reset-confirm-box" class="card-panel">
-            <p>Tem certeza que deseja reiniciar o jogo?</p>
-            <div class="button-group">
-                <button class="button-primary" onclick="confirmResetGame(true)">Sim</button>
-                <button class="button-secondary" onclick="confirmResetGame(false)">Não</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -544,7 +549,7 @@
             chaosCustomDuration: 3,
             soundEffectsOn: true,
             backgroundAnimationsOn: true,
-            gameLog: [],
+            gameLog: [], // Log de jogo simplificado, apenas para console
             player1Name: "Jogador 1",
             player2Name: "Jogador 2",
         };
@@ -552,7 +557,6 @@
         // Elemento onde as vistas serão renderizadas
         const appContainer = document.getElementById('app-container');
         const chaosIconEl = document.getElementById('chaosIcon');
-        const resetConfirmOverlay = document.getElementById('reset-confirm-overlay');
         const centralControlsEl = document.getElementById('central-controls');
 
         // --- Funções de Renderização de Vistas ---
@@ -585,7 +589,6 @@
             appContainer.innerHTML = `
                 <div id="life-counter-layout" class="animate-fade-in">
                     <div id="player1Section" class="player-section">
-                        <button class="reset-player-life-btn transform hover:scale-110 active:scale-90" onclick="resetPlayerLife('player1')">Reset</button>
                         <h3 class="text-2xl font-semibold mb-4 text-blue-300">${gameState.player1Name}</h3>
                         <div class="player-life-display" id="lifePlayer1">${gameState.player1Life}</div>
                         <div class="life-controls">
@@ -601,7 +604,6 @@
                     </div>
 
                     <div id="player2Section" class="player-section">
-                        <button class="reset-player-life-btn transform hover:scale-110 active:scale-90" onclick="resetPlayerLife('player2')">Reset</button>
                         <h3 class="text-2xl font-semibold mb-4 text-blue-300">${gameState.player2Name}</h3>
                         <div class="player-life-display" id="lifePlayer2">${gameState.player2Life}</div>
                         <div class="life-controls">
@@ -943,59 +945,6 @@
             }
         }
 
-        /**
-         * Reinicia a vida de um jogador individualmente para 10.
-         * @param {string} player - 'player1' ou 'player2'.
-         */
-        function resetPlayerLife(player) {
-            if (player === 'player1') {
-                gameState.player1Life = 10;
-                updateLifeDisplay('player1', gameState.player1Life);
-                document.getElementById('inputPlayer1').value = 10;
-                addLogEntry(`${gameState.player1Name || 'Jogador 1'} resetou a vida.`, 'reset');
-            } else {
-                gameState.player2Life = 10;
-                updateLifeDisplay('player2', gameState.player2Life);
-                document.getElementById('inputPlayer2').value = 10;
-                addLogEntry(`${gameState.player2Name || 'Jogador 2'} resetou a vida.`, 'reset');
-            }
-            playSound('reset');
-        }
-
-        /**
-         * Mostra a caixa de confirmação para reiniciar o jogo.
-         */
-        function showResetConfirm() {
-            resetConfirmOverlay.classList.add('visible');
-        }
-
-        /**
-         * Confirma ou cancela o reset do jogo.
-         * @param {boolean} confirm - True para confirmar, false para cancelar.
-         */
-        function confirmResetGame(confirm) {
-            resetConfirmOverlay.classList.remove('visible');
-            if (confirm) {
-                resetGame();
-            }
-        }
-
-        /**
-         * Reinicia todo o jogo (vidas, turno, modo caos).
-         */
-        function resetGame() {
-            gameState.player1Life = 10;
-            gameState.player2Life = 10;
-            gameState.currentTurn = 1;
-            gameState.chaosModeActive = false;
-            gameState.chaosTurnsRemaining = 0;
-            gameState.gameLog = []; // Limpa o log
-
-            addLogEntry('Jogo Reiniciado!', 'reset');
-            renderLifeCounter(); // Re-renderiza o contador de vida para atualizar tudo
-            playSound('reset');
-        }
-
         // --- Funções do Contador de Turnos ---
 
         /**
@@ -1030,6 +979,24 @@
             }
             updateTurnDisplay(); // Atualiza display de turno e caos
             playSound('nextTurn');
+        }
+
+        /**
+         * Volta para o turno anterior.
+         */
+        function previousTurn() {
+            if (gameState.currentTurn > 1) {
+                gameState.currentTurn--;
+                addLogEntry(`Retornou para o Turno ${gameState.currentTurn}.`, 'turn-change');
+                // Lógica para reverter o caos se necessário (simplificado para não reverter turnos do caos)
+                if (gameState.chaosModeActive && gameState.chaosTurnsRemaining < gameState.chaosCustomDuration) {
+                    gameState.chaosTurnsRemaining++; // Incrementa turnos do caos ao voltar
+                }
+                updateTurnDisplay();
+                playSound('nextTurn'); // Reutiliza o som de turno
+            } else {
+                addLogEntry('Já está no Turno 1.', 'general');
+            }
         }
 
         // --- Funções do Modo Caos ---
@@ -1070,18 +1037,7 @@
             updateChaosModeUI();
         }
 
-        /**
-         * Define a duração personalizada do Modo Caos.
-         */
-        function setChaosDuration() {
-            // Esta função seria chamada de dentro do modal de ferramentas, que foi removido.
-            // Se o usuário quiser configurar isso, precisaremos de uma nova interface.
-            // Por enquanto, apenas um log.
-            console.warn("A função setChaosDuration foi chamada, mas a interface para definir a duração do caos foi removida. A duração padrão é 3 turnos.");
-            addLogEntry(`Tentou definir Duração Caos. (Interface removida)`, 'settings');
-        }
-
-        // --- Funções de Log de Jogo (simplificadas, sem modal de ferramentas) ---
+        // --- Funções de Log de Jogo (simplificadas, apenas para console) ---
 
         /**
          * Adiciona uma entrada ao log de jogo.
@@ -1092,8 +1048,7 @@
             const timestamp = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const logEntry = { timestamp, message, type };
             gameState.gameLog.push(logEntry);
-            // No longer updating a visible log area, just console for now.
-            // If a log display is desired, it needs a dedicated UI element.
+            // O log agora é apenas para console, já que não há mais uma interface visível para ele.
             console.log(`[LOG] ${timestamp} - ${message}`);
         }
 
@@ -1108,9 +1063,6 @@
             switch (type) {
                 case 'lifeChange':
                     audio = new Audio('https://www.soundjay.com/buttons/button-1.wav');
-                    break;
-                case 'reset':
-                    audio = new Audio('https://www.soundjay.com/buttons/button-2.wav');
                     break;
                 case 'nextTurn':
                     audio = new Audio('https://www.soundjay.com/buttons/button-3.wav');
@@ -1212,7 +1164,6 @@
         // --- Inicialização do App ---
         document.addEventListener('DOMContentLoaded', () => {
             loadGameState(); // Carrega o estado salvo ao iniciar
-            // Não há mais listeners de arrasto ou ferramentas
 
             // Adiciona listener para salvar estado antes de fechar/recarregar
             window.addEventListener('beforeunload', saveGameState);
@@ -1222,4 +1173,3 @@
     </script>
 </body>
 </html>
-
